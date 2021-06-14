@@ -32,8 +32,8 @@ description: >-
   但是总是要找个地方写点东西记录下，偶尔释放写自己的创作欲
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+# twitter_username: jekyllrb
+github_username:  muzhy
 
 # Build settings
 theme: minima
