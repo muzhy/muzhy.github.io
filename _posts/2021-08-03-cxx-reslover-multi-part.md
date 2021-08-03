@@ -16,15 +16,15 @@ categories: C++
 
 `multipart/form-data`的格式大致为：
 > 
-    ----------------------------904587217962624105581666
-    Content-Disposition: form-data; name="projectName"
-    
-    testProject
-    ----------------------------904587217962624105581666
-    Content-Disposition: form-data; name="clientName"
-    
-    aaa
-    -----------------------------904587217962624105581666--
+>    ----------------------------904587217962624105581666
+>    Content-Disposition: form-data; name="projectName"
+>    
+>    testProject
+>    ----------------------------904587217962624105581666
+>    Content-Disposition: form-data; name="clientName"
+>    
+>    aaa
+>    -----------------------------904587217962624105581666--
 
 发送`multipart/form-data`的Http请求头中的`Content-Type`信息：
 > multipart/form-data; boundary=----------------------------904587217962624105581666
