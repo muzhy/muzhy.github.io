@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Go的声明语法"
-date: 2021-10-42    +0800
+date: 2021-10-24    +0800
 categories: Go Syntax
 ---
 
