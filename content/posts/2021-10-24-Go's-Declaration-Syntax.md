@@ -1,8 +1,7 @@
 ---
-layout: post
-title: "Go的声明语法"
-date: 2021-10-24    +0800
 categories: Go Syntax
+date: "2021-10-24T00:00:00Z"
+title: Go的声明语法
 ---
 
 # Go的声明语法

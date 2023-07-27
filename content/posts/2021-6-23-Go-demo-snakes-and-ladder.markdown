@@ -1,8 +1,7 @@
 ---
-layout: post
-title: "Go入门——以LeetCode上的'#909蛇梯棋'为例"
-date: 2021-07-03 +0800
-categories: Go 
+categories: Go
+date: "2021-06-23T00:00:00Z"
+title: Go入门——以LeetCode上的'#909蛇梯棋'为例
 ---
 
 ## 前言

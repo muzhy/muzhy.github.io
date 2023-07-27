@@ -1,8 +1,7 @@
 ---
-layout: post
-title: "Go中切片（slice）append后行为不一致的问题"
-date: 2021-07-10 +0800
-categories: Go 
+categories: Go
+date: "2021-07-10T00:00:00Z"
+title: Go中切片（slice）append后行为不一致的问题
 ---
 
 ## 切片与数组

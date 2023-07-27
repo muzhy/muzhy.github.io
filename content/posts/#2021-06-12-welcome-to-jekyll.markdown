@@ -1,8 +1,7 @@
 ---
-layout: post
-title:  "Welcome to Jekyll!"
-date:   2021-06-12 23:14:15 +0800
 categories: jekyll update
+date: "2021-06-12T23:14:15Z"
+title: Welcome to Jekyll!
 ---
 You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
@@ -14,13 +13,13 @@ Where `YEAR` is a four-digit number, `MONTH` and `DAY` are both two-digit number
 
 Jekyll also offers powerful support for code snippets:
 
-{% highlight ruby %}
+{{< highlight ruby >}}
 def print_hi(name)
   puts "Hi, #{name}"
 end
 print_hi('Tom')
 #=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+{{< / highlight >}}
 
 Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 

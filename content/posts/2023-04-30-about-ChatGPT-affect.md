@@ -1,8 +1,7 @@
 ---
-layout: post
-title:  "关于ChatGPT影响的一点思考"
-date:   2023-04-30 +0800
 categories: ai ChatGPT
+date: "2023-04-30T00:00:00Z"
+title: 关于ChatGPT影响的一点思考
 ---
 
 # 关于ChatGPT影响的一点思考

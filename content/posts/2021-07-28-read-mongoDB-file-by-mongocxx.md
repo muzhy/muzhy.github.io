@@ -1,8 +1,7 @@
 ---
-layout: post
-title: "基于mongocxx实现对MongoDB存储的文件的随机读取"
-date: 2021-07-28 +0800
 categories: C++
+date: "2021-07-28T00:00:00Z"
+title: 基于mongocxx实现对MongoDB存储的文件的随机读取
 ---
 
 # 背景
