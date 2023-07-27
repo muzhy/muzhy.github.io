@@ -1,4 +1,4 @@
-baseURL = 'http://example.org/'
+baseURL = 'https://muzhy.github.io/'
 languageCode = 'zh-cn'
 title = '木章永的个人博客'
 theme = 'hugo-coder'
