@@ -6,8 +6,6 @@ defaultcontentlanguage = 'zh'
 
 paginate = 20
 
-disqusShortname = 'muzhy'
-
 [markup.hightlight]
 style = 'tango'
 
