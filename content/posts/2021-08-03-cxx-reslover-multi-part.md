@@ -1,8 +1,12 @@
----
-categories: C++
-date: "2021-08-03T00:00:00Z"
-title: C++解析multipart/form-data
----
++++ 
+date = 2021-08-03T00:00:00+08:00
+title = "C++解析multipart/form-data"
+description = "C++解析multipart/form-data"
+slug = "Reslover 'multipart/form-data' use c++"
+authors = ["木章永"]
+tags = ["C++"]
+categories = ["C++"]
++++
 
 # 背景
 使用`boost.beast`实现简单的HTTP服务，但是`boost.beast`没有提供对表单数据的解析，为此需要自己实现解析表单数据。

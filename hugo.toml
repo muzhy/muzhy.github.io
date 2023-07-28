@@ -41,6 +41,5 @@ style = 'tango'
 
 [taxonomies]
   category = 'categories'
-  series = 'series'
   tag = 'tags'
   author = 'authors'

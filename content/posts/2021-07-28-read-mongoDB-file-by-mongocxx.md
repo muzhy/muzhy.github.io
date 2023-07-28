@@ -1,8 +1,12 @@
----
-categories: C++
-date: "2021-07-28T00:00:00Z"
-title: 基于mongocxx实现对MongoDB存储的文件的随机读取
----
++++ 
+date = 2021-07-28T00:00:00+08:00
+title = "基于mongocxx实现对MongoDB存储的文件的随机读取"
+description = "Go中切片（slice）append后行为不一致的问题"
+slug = "Implement file random on MongoDB base mongocxx"
+authors = ["木章永"]
+tags = ["C++", "MongoDB"]
+categories = ["C++", "MongoDB"]
++++
 
 # 背景
 最近所开发的项目使用MongoDB的GridFS保存文件，且文件大部分均大于500M，在程序运行过程中需要读取文件数据进行处理。但是MongoDB提供的mongocxx只能将整个文件下载下来或者暂时保存在内存中。每次处理数据都需要下载到本地是比较耗时的，且每次处理完还需要删除临时文件。

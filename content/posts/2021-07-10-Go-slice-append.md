@@ -1,8 +1,12 @@
----
-categories: Go
-date: "2021-07-10T00:00:00Z"
-title: Go中切片（slice）append后行为不一致的问题
----
++++ 
+date = 2021-07-10T00:00:00+08:00
+title = "Go中切片（slice）append后行为不一致的问题"
+description = "Go中切片（slice）append后行为不一致的问题"
+slug = "The problam of call append on slice in Go lang"
+authors = ["木章永"]
+tags = ["Go"]
+categories = ["Go"]
++++
 
 ## 切片与数组
 Go中的切片是在数组之上的抽象数据类型。众所周知，数组类型定义了元素类型和长度，即长度是数组类型的一部分，是固定不变的。

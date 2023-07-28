@@ -1,8 +1,13 @@
----
-categories: lua ipv4 ip
-date: "2023-04-29T00:00:00Z"
-title: lua实现简单的ip4过滤
----
++++ 
+date = 2023-04-29T00:00:00+08:00
+title = "lua实现简单的ip4过滤"
+description = "lua实现简单的ip4过滤"
+slug = "Simple IPv4 filter use Lua"
+authors = ["木章永"]
+tags = ["Lua"]
+categories = ["Lua"]
++++
+
 # lua 实现简单的ip4过滤
 最近参与了一个使用openresty开发的服务，有个需求是要某些接口只能允许指定的ip进行访问，在`nginx.conf`进行配置虽然也能做到限定ip访问，但是却需要重启服务。需求是要求能在界面上配置后不用重启就生效，并且由于可能要允许通过的ip地址会很多，希望能支持掩码或网络段的配置。
 

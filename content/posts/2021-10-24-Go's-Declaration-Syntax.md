@@ -1,8 +1,12 @@
----
-categories: Go Syntax
-date: "2021-10-24T00:00:00Z"
-title: Go的声明语法
----
++++ 
+date = 2021-10-24T00:00:00+08:00
+title = "Go的声明语法"
+description = "Go的声明语法"
+slug = "Go's statement grammar"
+authors = ["木章永"]
+tags = ["GO"]
+categories = ["Go"]
++++
 
 # Go的声明语法
 

@@ -1,8 +1,12 @@
----
-categories: ai ChatGPT
-date: "2023-04-30T00:00:00Z"
-title: 关于ChatGPT影响的一点思考
----
++++ 
+date = 2023-04-30T00:00:00+08:00
+title = "关于ChatGPT影响的一点思考"
+description = "关于ChatGPT影响的一点思考"
+slug = "Think about ChatGPT"
+authors = ["木章永"]
+tags = ["AI"]
+categories = ["AI"]
++++
 
 # 关于ChatGPT影响的一点思考
 以ChatGPT为代表的生成式AI越来越多，很多人都认为这将对当前的社会产生革命性的影响，特别是对编程领域，ChatGPT已经根据输入的自然语言描述生成代码。

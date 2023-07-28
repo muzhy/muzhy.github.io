@@ -1,8 +1,13 @@
----
-categories: Go
-date: "2021-06-23T00:00:00Z"
-title: Go入门——以LeetCode上的'#909蛇梯棋'为例
----
++++ 
+date = 2021-06-23T00:00:00+08:00
+title = "Go入门——以LeetCode上的'#909蛇梯棋'为例"
+description = "使用Go解决的LeetCode问题——#909蛇梯棋"
+slug = "Golang demo to solve LeetCode issue 909"
+authors = ["木章永"]
+tags = ["Go", "LeetCode"]
+categories = ["Go", "LeetCode"]
++++
+
 
 ## 前言
 
