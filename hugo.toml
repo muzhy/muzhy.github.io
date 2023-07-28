@@ -9,28 +9,29 @@ paginate = 20
 disqusShortname = 'muzhy'
 
 [markup.hightlight]
-style = 'github-dark'
+style = 'tango'
 
 [params]
   author = '木章永'
-  info = '木章永想要平静的生活'
+  info = '普通上班族'
   description = '木章永的个人博客'
-  keywords = 'blog,developer'
+  keywords = 'blog,developer,博客,开发者'
+  avatarURL = 'images/avatar.jpg'     
+  faviconSVG = 'images/favicon.svg'
   
   since = 2023
-
+  math = true
   enableTwemoji = true
-
   colorScheme = 'auto'
 
-[taxonomies]
-  category = 'categories'
-  series = 'series'
-  tag = 'tags'
-  author = 'authors'
+[[params.social]]
+  name = 'GitHub'
+  icon = "fa fa-github fa-2x"
+  weight = 1
+  url = "https://github.com/muzhy/"
 
 [[menu.main]]
-  name = 'Blog'
+  name = 'Posts'
   weight = 1
   url = 'posts/'
 [[menu.main]]
@@ -38,4 +39,8 @@ style = 'github-dark'
   weight = 2
   url = 'about/'
 
-
+[taxonomies]
+  category = 'categories'
+  series = 'series'
+  tag = 'tags'
+  author = 'authors'
