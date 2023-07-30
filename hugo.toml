@@ -28,6 +28,12 @@ style = 'tango'
   weight = 1
   url = "https://github.com/muzhy/"
 
+[[params.social]]
+  name = 'Email'
+  icon = "fa fa-email-bulk fa-2x"
+  weight = 2
+  url = "mailto:zhangyong_chen@foxmail.com"
+
 [[menu.main]]
   name = 'Posts'
   weight = 1
