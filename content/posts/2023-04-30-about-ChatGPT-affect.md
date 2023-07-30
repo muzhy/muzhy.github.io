@@ -6,6 +6,7 @@ slug = "Think about ChatGPT"
 authors = ["木章永"]
 tags = ["AI"]
 categories = ["AI"]
+isCJKLanguage = true
 +++
 
 # 关于ChatGPT影响的一点思考

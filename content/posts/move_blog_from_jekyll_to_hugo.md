@@ -6,6 +6,8 @@ slug = "move blog from Jekyll to Hugo"
 authors = ["木章永"]
 tags = ["Blog", "Hugo"]
 categories = ["Blog"]
+isCJKLanguage = true
+keywords = ["Hugo", "Blog"]
 +++
 
 # 将个人博客从Jekyll迁移到Hugo
