@@ -1,7 +1,7 @@
 +++
 draft = true
 isCJKLanguage = true
-title = "Use Libcurl Implement Http Client in Cpp"
+title = "在C++中通过libcurl发起http请求"
 description = "在C++中通过libcurl发起http请求"
 keywords = ["C++", "HTTP", "curl"]
 date = 2023-11-01T14:51:39+08:00
