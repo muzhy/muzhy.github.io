@@ -300,8 +300,6 @@ void TSignatureGenerater::generate(const THttpRequest& request, std::map<tstring
         (unsigned char*)signatureBase.c_str(), signatureBase.size(), signature, &signatureLen);
     auto signatureBase64 = toBase64String(signature, signatureLen);
 
-    // gError().log(TLog::levelDebug).format("signature base64 string is : %").arg(signatureBase64) << std::endl;
-
     mapHeaderParams[TSignatureGenerater::HEADER_KEY_SIGATURE_INPUT] = signatureInput;
     mapHeaderParams[TSignatureGenerater::HEADER_KEY_SIGNATURE] = 
         "recall=:" + signatureBase64 + ":";
@@ -309,3 +307,98 @@ void TSignatureGenerater::generate(const THttpRequest& request, std::map<tstring
     return ;
 }
 ```
+
+# THttpResponse
+
+```C++
+class THttpResponse
+{
+public:
+    THttpResponse(){}
+    ~THttpResponse() {}
+
+    TResponseBodyData getParsedBodyData() throw(HttpHelperException)
+    {
+        return TResponseBodyData(m_strBody);
+    }
+
+    long m_lHttpCode;
+    tstring m_strHeader;
+    tstring m_strBody;
+};
+```
+`THttpResponse`很简单，因为对于body的处理需要根据业务在上层进行处理，而对于当前的需求而言，除了返回的状态码，并不需要其他功能，因此在这里不做太多复杂的封装
+
+
+# 发起请求
+
+```C++
+THttpResponse sendHttpRequest(const THttpRequest& request) throw (HttpHelperException)
+{
+    CURL* curl = curl_easy_init();
+    if(NULL == curl)
+    {
+        throw HttpHelperException("can't init curl");
+    }
+
+    auto curlDeleter = [](CURL* curl){
+        curl_easy_cleanup(curl);
+    };
+    std::shared_ptr<CURL> curlPtr(curl, curlDeleter);
+
+    tstring fullUrl = request.getFullUrl();
+
+    curl_easy_setopt(curl, CURLOPT_URL, fullUrl.c_str());
+    switch (request.getMethod())
+    {
+    case HTTP_METHOD_POST:
+        curl_easy_setopt(curl, CURLOPT_POST, 1);
+        break;
+    default:
+        // not set is GET method
+        break;
+    }
+    // 使用https时不检查证书有效性
+    if(request.isUseHttps())
+    {
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+    }
+
+    auto mapHeaderParams = request.generateFullHeaderParam();
+    struct curl_slist *hs=NULL;   
+    // for(auto& it : request.getHeaderParam())
+    for(auto  &it : mapHeaderParams)
+    {
+        tstring line = it.first + ": " + it.second;
+        hs = curl_slist_append(hs, line.c_str());
+    }
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, hs);
+    auto hsDeleter = [](curl_slist *hs){
+        curl_slist_free_all(hs);
+    };
+    std::shared_ptr<curl_slist> hsStr(hs, hsDeleter);
+
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, request.getBodyString().c_str());
+
+    THttpResponse response;    
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeToString);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&response.m_strBody);
+    curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, writeToString);
+    curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void*)&response.m_strHeader); 
+
+    CURLcode curlResCode = curl_easy_perform(curl);
+    if(curlResCode != CURLE_OK)
+    {
+        throw HttpHelperException(TFmtString("execute http request failed : [%]%")
+            .arg(curlResCode).arg(curl_easy_strerror(curlResCode)).str());
+    }
+
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response.m_lHttpCode);
+
+    return response;
+}
+```
+
+到了发起请求的时候才需要调用`libcurl`，前面的都只是为了生成请求的数据。
+
+
