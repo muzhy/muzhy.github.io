@@ -266,6 +266,21 @@ private:
 
 ### 实现
 ```C++
+#include <random>
+
+tstring generateASCIIRamdonStr(const unsigned int len)
+{
+    tstring str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+    while(str.size() < len)
+    {
+        str += str;
+    }
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    shuffle(str.begin(), str.end(), generator);
+    return str.substr(0, len);  
+}
+
 void TSignatureGenerater::generate(const THttpRequest& request, std::map<tstring, tstring>& mapHeaderParams)
 {
     auto now = std::chrono::system_clock::now();
