@@ -211,13 +211,13 @@ void TContentDigestGenerater::generate(const THttpRequest& request, std::map<tst
     auto digest = toBase64String(md, len);
     
     mapHeaderParams[TContentDigestGenerater::HEADER_KEY_CONTENT_DIGEST] = 
-        TFmtString("%s=:%s:").arg(getHashAlgoName(m_eHashAlgo)).arg(digest).str();
+        std::format("{}=:{}:", getHashAlgoName(m_eHashAlgo), digest);
 }
 ```
 
 使用`openssl`提供的哈希算法对body计算哈希值，为了在http中传输，将计算的结果转换为base64字符串并添加到头部信息中。
 
-`TFmtString`是一个格式化字符串的函数
+`std::format`是C++20加入的字符串格式化函数
 
 ## TSignatureGenerater
 鉴权方式参考RFC 8941，在请求头中生成Signature，该Siganture需要依赖于Content-Digest
@@ -239,18 +239,16 @@ class TSignatureGenerater : public THttpHeaderPartGenerater
 public:
     // RFC 8941 设计得比较灵活，这里仅实现使用hmac算法生成的Signature, 需要appcode和secretKey
     // 若要设计为支持多种算法，可以考虑设计一个类似THttpHeaderPartGenerater的算法计算类，
-    TSignatureGenerater(const tstring& appcode, const tstring& secretKey) : 
-        m_strAppcode(appcode), m_strSecretKey(secretKey) {}
+    TSignatureGenerater(const tstring& appcode, const tstring& secretKey, const tstring& strSignatureName) : 
+        m_strAppcode(appcode), m_strSecretKey(secretKey), m_strSignatureName(strSignatureName) {}
     virtual ~TSignatureGenerater() {}
 
     virtual void generate(const THttpRequest& request, std::map<tstring, tstring>& mapHeaderParams);
 
-    inline void addSignatureParam(E_SIGNATURE_PARAM sigantureParam)
+    inline void setSignatureName(const tstring& strSignatureName)
     {
-        m_vecSignatureParam.push_back(sigantureParam);
+        m_strSignatureName = strSignatureName;
     }
-
-    inline void setHashAlgo(E_HASH_ALGO)
 
     static constexpr char* HEADER_KEY_SIGNATURE = "Signature";
     static constexpr char* HEADER_KEY_SIGATURE_INPUT = "Signature-Input";
@@ -259,7 +257,8 @@ private:
     static constexpr char* BASE_SIGNATURE_PARAMS = "(\"@method\" \"@query\" \"content-type\" \"content-length\" \"content-digest\");alg=\"hmac-sha256\";";
 
     tstring m_strAppcode;
-    tstring m_strSecretKey;    
+    tstring m_strSecretKey;   
+    tstring m_strSignatureName; 
 
     std::vector<E_SIGNATURE_PARAM> m_vecSignatureParam;
 };
@@ -272,14 +271,14 @@ void TSignatureGenerater::generate(const THttpRequest& request, std::map<tstring
     auto now = std::chrono::system_clock::now();
     auto nTimestamp = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
 
-    tstring signatureParams = TFmtString("%created=%;keyid=\"%\";nonce=\"%\";tag=\"api1\"")
-        .arg(tstring(TSignatureGenerater::BASE_SIGNATURE_PARAMS)).arg(std::to_string(nTimestamp))
-        .arg(m_strAppcode).arg(generateASCIIRamdonStr(32)).str();
+    tstring signatureParams = std::format("{}created={};keyid=\"{}\";nonce=\"{}\";tag=\"api1\"",
+        tstring(TSignatureGenerater::BASE_SIGNATURE_PARAMS), std::to_string(nTimestamp)
+        , m_strAppcode, generateASCIIRamdonStr(32));
     
-
-    tstring signatureInput = "recall=" + signatureParams;
+    tstring signatureInput = m_strSignatureName + "=" + signatureParams;
     // signatureBase需要根据设置的参数构造，这里采用固定的参数简化实现
     tstring signatureBase = "\"@method\": " + getHttpMethodString(request.getMethod()) + "\n";
+    // 此处假定没有url参数
     signatureBase += "\"@query\": ?\n";
     signatureBase += "\"content-type\": " + request.getContentType() + "\n";
     signatureBase += "\"content-length\": " + std::to_string(request.getContentLength()) + "\n";
@@ -389,8 +388,8 @@ THttpResponse sendHttpRequest(const THttpRequest& request) throw (HttpHelperExce
     CURLcode curlResCode = curl_easy_perform(curl);
     if(curlResCode != CURLE_OK)
     {
-        throw HttpHelperException(TFmtString("execute http request failed : [%]%")
-            .arg(curlResCode).arg(curl_easy_strerror(curlResCode)).str());
+        throw HttpHelperException(std::format("execute http request failed : [{}}]{}", 
+            curlResCode, curl_easy_strerror(curlResCode) ));
     }
 
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response.m_lHttpCode);
@@ -400,5 +399,23 @@ THttpResponse sendHttpRequest(const THttpRequest& request) throw (HttpHelperExce
 ```
 
 到了发起请求的时候才需要调用`libcurl`，前面的都只是为了生成请求的数据。
+
+# 使用方式：
+```C++
+tstring body = "{\"key\" : \"Hello World\"}";
+tstring host = "localhost";
+tstring url = "/hello";
+
+THttpRequest req(host, url, needSignature, HTTP_METHOD_POST);
+req.setBodyString(body);
+req.setContentType(THttpRequest::HTTP_CONTENT_TYPE_JSON_STR);
+
+auto contentDigestGenerater = std::make_shared<TContentDigestGenerater>(HASH_ALGO_SHA256);
+req.addHeaderPartGenerater(contentDigestGenerater);
+auto signtureGenerater = std::make_shared<TSignatureGenerater>(appcode, securityKey);
+req.addHeaderPartGenerater(signtureGenerater);
+
+auto resp = sendHttpRequest(req);
+```
 
 
