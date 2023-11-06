@@ -1,9 +1,8 @@
 baseURL = 'https://muzhy.github.io/'
 languageCode = 'zh-cn'
 title = '木章永的个人博客'
-theme = 'PaperMod'
+theme = 'hugo-coder'
 defaultcontentlanguage = 'zh'
-enableRobotsTXT = true
 
 paginate = 20
 
@@ -14,9 +13,10 @@ style = 'tango'
   author = '木章永'
   info = '普通上班族'
   description = '木章永的个人博客'
+  keywords = 'blog,developer,博客,开发者'
   avatarURL = 'images/avatar.jpg'     
   faviconSVG = 'images/favicon.svg'
-  keywords = ["Blog", "博客", "programer"]
+  
   since = 2023
   math = true
   enableTwemoji = true
@@ -42,11 +42,6 @@ style = 'tango'
   name = 'About'
   weight = 2
   url = 'about/'
-
-[[menu.main]]
-  name = 'categories'
-  url = 'categories/'
-  weight = 3
 
 [taxonomies]
   category = 'categories'
