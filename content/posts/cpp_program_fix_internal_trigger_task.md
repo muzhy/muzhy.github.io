@@ -1,12 +1,11 @@
 +++
-draft = true
 isCJKLanguage = true
-title = "Cpp_program_fix_internal_trigger_task"
+title = "C++程序固定时长执行任务"
 description = ""
-keywords = [C++]
+keywords = ["C++]
 date = 2024-02-03T14:35:41+08:00
 authors = ["木章永"]
-tags = [C++]
+tags = ["C++"]
 categories = []
 +++
 
