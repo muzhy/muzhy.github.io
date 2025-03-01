@@ -5,7 +5,7 @@ theme = 'PaperMod'
 defaultcontentlanguage = 'zh'
 enableRobotsTXT = true
 
-paginate = 20
+pagination.pagerSize = 20
 
 [markup.hightlight]
 style = 'tango'
