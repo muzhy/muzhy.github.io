@@ -1,7 +1,7 @@
 baseURL = 'https://muzhy.github.io/'
 languageCode = 'zh-cn'
 title = '木章永的个人博客'
-theme = 'PaperMod'
+theme = 'hugo-clarity'
 defaultcontentlanguage = 'zh'
 enableRobotsTXT = true
 
