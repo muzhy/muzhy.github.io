@@ -6,6 +6,7 @@ slug = "Simple IPv4 filter use Lua"
 authors = ["木章永"]
 tags = ["Lua"]
 categories = ["Lua"]
+cover = "/images/Lua-Logo.svg"
 +++
 
 # lua 实现简单的ip4过滤

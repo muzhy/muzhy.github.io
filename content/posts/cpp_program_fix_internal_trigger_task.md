@@ -7,6 +7,7 @@ date = 2024-02-03T14:35:41+08:00
 authors = ["木章永"]
 tags = ["C++"]
 categories = []
+cover = "/images/Nixie_clock.jpg"
 +++
 
 # 使用`condition_variable`实现定时执行任务

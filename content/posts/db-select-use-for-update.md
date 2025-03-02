@@ -1,12 +1,13 @@
 +++
 isCJKLanguage = true
-title = "数据库查询时使用`for update`"
-description = "数据库查询时使用`for update`"
+title = "数据库查询时使用`for update`加锁"
+description = "数据库查询时使用`for update`加锁"
 keywords = ["DB", "mysql", "for update"]
 date = 2023-11-24T16:14:27+08:00
 authors = ["木章永"]
 tags = ["DB"]
 categories = ["DB"]
+cover = "/images/database.jpg"
 +++
 
 数据库开启事务后，使用select语句并不会对查询到的数据加锁，当两个线程需要查询相同的数据，并且需要根据数据进行修改时，可能发生A线程和B线程都查询到数据，然后A线程根据结果对数据进行修改，而B线程还是根据旧的数据进行判断然后更新数据，将导致B线程的结果覆盖掉A线程的结果

@@ -8,6 +8,7 @@ tags = ["Blog", "Hugo"]
 categories = ["Blog"]
 isCJKLanguage = true
 keywords = ["Hugo", "Blog"]
+cover = "/images/hugo.png"
 +++
 
 # 将个人博客从Jekyll迁移到Hugo

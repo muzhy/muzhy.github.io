@@ -5,3 +5,5 @@ _site
 vendor
 
 public/
+
+resources/_gen
