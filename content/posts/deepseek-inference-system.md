@@ -1,5 +1,4 @@
 +++
-draft = true
 isCJKLanguage = true
 title = "从开源周看DeepSeek推理系统"
 description = "DeepSeek开源周开源了多个项目,并且在开源周结束之后,还发布[DeepSeek-V3 / R1 推理系统概览]，文章中介绍的内容,可以很好的理解DeepSeek开源周中开源的项目是为了什么目的而开发的,在整个系统中发挥了什么作用."
