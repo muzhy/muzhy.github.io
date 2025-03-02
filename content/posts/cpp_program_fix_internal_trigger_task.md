@@ -1,7 +1,7 @@
 +++
 isCJKLanguage = true
 title = "C++程序固定时长执行任务"
-description = ""
+description = "按固定时间间隔触发任务。"
 keywords = ["C++"]
 date = 2024-02-03T14:35:41+08:00
 authors = ["木章永"]
@@ -11,7 +11,7 @@ cover = "/images/Nixie_clock.jpg"
 +++
 
 # 使用`condition_variable`实现定时执行任务
-遇到一个开发任务，需要按一定的时间间隔执行任务，本来是一个简单的功能，直接使用`condition_variable`就可以了
+遇到一个开发任务，需要按一定的时间间隔执行任务，本来是一个简单的功能，直接使用`condition_variable`就可以了（对实时性要求并不是太高，不需要考虑ms级别的误差）
 
 最开始是直接使用`condition_variable`实现的定时触发机制, 代码的大致实现类似于：
 ```C++
