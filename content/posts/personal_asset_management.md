@@ -1,5 +1,4 @@
 +++
-draft = true
 isCJKLanguage = true
 title = "个人资产管理"
 description = "对个人资产配置的一点想法"
@@ -8,7 +7,7 @@ date = 2025-06-10T16:43:05+08:00
 authors = ["木章永"]
 tags = ["finance"]
 categories = ["finance"]
-cover = "/images/finanace.png"
+cover = "/images/资产同心圆-封面.png"
 +++
 
 每个人都应该了解自己的财务状况，只有了解了自己的财务状况才能根据自己的情况进行资产配置。
