@@ -1,7 +1,7 @@
 +++ 
 date = 2021-07-10T00:00:00+08:00
-title = "Go中切片（slice）append后行为不一致的问题"
-description = "Go中切片（slice）append后行为不一致的问题"
+title = "Go中切片（slice）append后行为不一致"
+description = "Go中切片（slice）append后行为不一致"
 slug = "The problam of call append on slice in Go lang"
 authors = ["木章永"]
 tags = ["Go"]
@@ -117,4 +117,4 @@ func main() {
 如果想要保证在函数确实能起作用，需要传递向之前的代码将指向切片的指针作为参数，但是就会出现之前的代码所说的问题
 
 ## 结论
-不要在函数内部对参数的切片执行`append`操作，否则可能会达不到预期的效果。不管了将切片作为参数，还是将切片的指针作为参数，都可能导致行为的不一致
+`append`函数总是返回一个新的切片。即使底层数组没有重新分配，长度和容量信息也会更新，所以最佳实践是始终将append的返回值重新赋值给原切片变量（例如`slice = append(slice, element)`）。
