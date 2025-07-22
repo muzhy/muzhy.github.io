@@ -7,6 +7,7 @@ date = 2025-07-22T15:38:27+08:00
 authors = ["木章永"]
 tags = ["Go"]
 categories = ["Go"]
+cover = "/images/Go.png"
 +++
 
 最近在学习`Go`, 打算写点小项目来练手，实现的过程中发现需要在`slice`上执行`Filter`操作，但是标准库没有提供，像`go-stream`这些库提供的又是比较高级的抽象，所以就有了`Lapluma`这个库
