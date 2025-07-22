@@ -1,7 +1,7 @@
 +++
 isCJKLanguage = true
-title = "一个轻量级的 Go 数据流处理库 - Lapluma"
-description = "一个轻量级的 Go 数据流处理库 - Lapluma"
+title = "LaPluma : 一个轻盈的 Go 数据流处理库"
+description = "LaPluma : 一个轻盈的 Go 数据流处理库"
 keywords = ["Go"]
 date = 2025-07-22T15:38:27+08:00
 authors = ["木章永"]
