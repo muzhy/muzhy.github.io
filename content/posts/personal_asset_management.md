@@ -8,6 +8,7 @@ authors = ["木章永"]
 tags = ["finance"]
 categories = ["finance"]
 cover = "/images/资产同心圆-封面.png"
+draft = true
 +++
 
 每个人都应该了解自己的财务状况，只有了解了自己的财务状况才能根据自己的情况进行资产配置。

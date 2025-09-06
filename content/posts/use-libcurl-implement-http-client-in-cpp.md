@@ -8,6 +8,7 @@ authors = ["木章永"]
 tags = ["C++", "HTTP"]
 categories = ["C++", "HTTP"]
 cover = "/images/curl.webp"
+draft = true
 +++
 
 需要在C++程序中通过HTTPS调用第三方接口，之前的库中虽然也有发起HTTP请求的，但是没有使用HTTPS，并且需要在请求头中添加Signature进行鉴权，简单搜索了下，感觉通过调用`libcurl`来实现该请求会比较简单，并且`libcurl`的可靠性大概要比自己实现或者其他的库更好
@@ -432,5 +433,3 @@ req.addHeaderPartGenerater(signtureGenerater);
 
 auto resp = sendHttpRequest(req);
 ```
-
-

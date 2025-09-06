@@ -6,6 +6,7 @@ slug = "Go's statement grammar"
 authors = ["木章永"]
 tags = ["GO"]
 categories = ["Go"]
+draft = true
 +++
 
 # Go的声明语法
@@ -166,4 +167,3 @@ x = p^
 ## Notes
 Go的声明式从左往右读的，而有人指出C的读法的螺旋的！
 See The ["Clockwise/Spiral Rule"](http://c-faq.com/decl/spiral.anderson.html) by David Anderson.
-

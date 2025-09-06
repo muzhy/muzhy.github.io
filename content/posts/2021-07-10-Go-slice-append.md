@@ -6,6 +6,7 @@ slug = "The problam of call append on slice in Go lang"
 authors = ["木章永"]
 tags = ["Go"]
 categories = ["Go"]
+draft = true
 +++
 
 ## 切片与数组

@@ -7,6 +7,7 @@ authors = ["木章永"]
 tags = ["Lua"]
 categories = ["Lua"]
 cover = "/images/Lua-Logo.svg"
+draft = true
 +++
 
 # lua 实现简单的ip4过滤
@@ -163,4 +164,3 @@ end
 功能上与业务无关，又感觉在这个小系统，特别是对于部署在局域网内且只需要部分ip返回的具有较高权限要求的服务的时候算是一个比较通用的功能，因此就将这块代码摘出来。
 
 完整的代码放在[ip-filter](https://github.com/muzhy/ip-filter),将功能封装为一个类，使用方法可参考`test_ip-filter.lua`,其中也包含了几个测试用例
-

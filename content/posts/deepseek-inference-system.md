@@ -8,6 +8,7 @@ authors = ["木章永"]
 tags = ['DeepSeek']
 categories = ['AI']
 cover = '/images/deepseek.jpg'
+draft = true
 +++
 
 DeepSeek开源周开源了多个项目,并且在开源周结束之后,还发布[DeepSeek-V3 / R1 推理系统概览](https://zhuanlan.zhihu.com/p/27181462601),网络上很多人关心的是其公布的成本利润细节, 但是个人认为文章中介绍的推理系统的优化目标和解决方案也值得关注.

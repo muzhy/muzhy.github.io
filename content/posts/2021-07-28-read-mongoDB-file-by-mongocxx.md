@@ -6,6 +6,7 @@ slug = "Implement file random on MongoDB base mongocxx"
 authors = ["木章永"]
 tags = ["C++", "MongoDB"]
 categories = ["C++", "MongoDB"]
+draft = true
 +++
 
 # 背景

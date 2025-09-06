@@ -1,155 +1,193 @@
 +++
 isCJKLanguage = true
-title = "LaPluma : 一个轻盈的 Go 数据流处理库"
-description = "LaPluma : 一个轻盈的 Go 数据流处理库"
-keywords = ["Go"]
+title = "La Pluma: A Lightweight Go Data Streaming Library"
+description = "An introduction to La Pluma, a lightweight, functional-style Go library for building simple and composable data streaming pipelines. This article covers its core components, Iterator for sequential processing and Pipe for concurrent streams, its use of Go generics, and its unique approach to error handling."
+keywords = ["Go", "Golang", "La Pluma", "Data Streaming", "Stream Processing", "Functional Programming", "Concurrency", "Iterator", "Pipe", "Go Generics", "Go Library", "Data Pipeline", "Map Filter Reduce"]
 date = 2025-07-22T15:38:27+08:00
-authors = ["木章永"]
+authors = ["muzhy"]
 tags = ["Go"]
 categories = ["Go"]
 cover = "/images/Go.png"
+draft = false
 +++
 
-最近在学习`Go`, 打算写点小项目来练手，实现的过程中发现需要在`slice`上执行`Filter`操作，但是标准库没有提供，像`go-stream`这些库提供的又是比较高级的抽象，所以就有了`Lapluma`这个库
+GitHub repositorie: [lapluma](https://github.com/muzhy/lapluma)
 
-仓库地址：[lapluma](https://github.com/muzhy/lapluma)
+# La Pluma: A Lightweight Go Data Streaming Library
 
-# 核心设计理念
-`Lapluma`旨在提供一套简洁、可组合且易于理解的数据处理工具，通过提供一组正交的基础操作，开发者将这些模块进行组合，构建出满足需求的数据处理流水线
+`La Pluma` is a compact, functional-style Go utility library that provides a simple and composable set of data processing tools.
+It includes two core components: **`Iterator`** for sequential data processing and **`Pipe`**, which leverages Go's channels and context for concurrent data processing.
 
-`Lapluma`提供了两个核心组件：`Iterator`和`Pipe`
+## Core Design
 
-## 1. `Iterator` - 串行数据流
-`Iterator` 是一个前向迭代器接口，它定义了对数据序列的逐一访问。
+The library's core is built around **simplicity** and **composability**. By offering a set of orthogonal, single-purpose operations (such as `Map`, `Filter`, and `Reduce`), it enables the construction of clear, readable, and powerful data processing pipelines.
 
-**主要操作:**
-- `FromSlice(data []E) Iterator[E]`: 从切片创建迭代器。
-- `FromMap(data map[K]V) Iterator[Pair[K,V]]`: 从 map 创建迭代器。
-- `Map[E, R](it Iterator[E], handler func(E) R) Iterator[R]`: 对每个元素应用一个无错误的转换。
-- `Filter[E](it Iterator[E], filter func(E) bool) Iterator[E]`: 过滤不符合条件的元素。
-- `Reduce[E, R](it Iterator[E], handler func(R, E) R, initial R) R`: 将序列聚合为单个值。
-- `Collect[E](it Iterator[E]) []E`: 将迭代器中的所有元素收集到切片中。
+## Core Concepts
 
-**示例:**
+### 1. `Iterator` - Sequential Data Streams
+
+`Iterator` is a standard iterator interface that defines element-by-element access to a data sequence.
+
+**Main Operations:**
+
+  * `FromSlice(data []E) Iterator[E]`: Creates an iterator from a slice.
+  * `FromMap(data map[K]V) Iterator[Pair[K,V]]`: Creates an iterator from a map.
+  * `Map[E, R](it Iterator[E], handler func(E) R) Iterator[R]`: Applies a non-error-prone transformation to each element.
+  * `Filter[E](it Iterator[E], filter func(E) bool) Iterator[E]`: Filters out elements that do not meet a condition.
+  * `Reduce[E, R](it Iterator[E], handler func(R, E) R, initial R) R`: Aggregates the sequence into a single value.
+  * `Collect[E](it Iterator[E]) []E`: Gathers all elements from an iterator into a slice.
+  * `Iter[E any](it Iterator[E]) iter.Seq[E]` and `Iter2[K, V any](it Iterator[lapluma.Pair[K, V]]) iter.Seq2[K, V]`: Creates an iterator that conforms to the `iter` package, allowing it to be used with a `for-range` loop.
+
+**Example:**
+
 ```go
-// 创建迭代器
+// Create an iterator
 data := []int{1, 2, 3, 4, 5}
 it := iterator.FromSlice(data)
 
-// 链式操作
+// Chained operations
 result := iterator.Collect(
     iterator.Filter(
         iterator.Map(it, func(x int) int { return x * 2 }),
         func(x int) bool { return x > 5 }
     )
 ) // [6, 8, 10]
+
+// Or use a for-range loop to process the iterator result directly:
+it := iterator.Filter(
+    iterator.Map(it, func(x int) int { return x * 2 }),
+    func(x int) bool { return x > 5 }
+)
+for data := range Iter(filteredIt) {
+    fmt.Printf("%v", data)
+}
 ```
 
-## 2. `Pipe` - 并发数据流
-`Pipe` 基于 Go 的 channel 构建，每个操作（如 `Map`, `Filter`）都在一个独立的 goroutine 中运行，形成一条处理流水线。
+The `Iterator` is designed for sequential processing and is not concurrent-safe. If you require concurrency, convert it to a `Pipe` by calling `pipe.FromIterator`.
 
-所有的 `Pipe` 操作都与 `context.Context` 集成，可以轻松实现超时控制和优雅退出。
+### 2. `Pipe` - Concurrent Data Streams
 
+`Pipe` is the concurrent version of `Iterator`. It's built on Go channels, and each operation (e.g., `Map`, `Filter`) runs in a separate group of goroutines, forming a processing pipeline.
 
-**主要操作:**
-- `FromSlice(data []E, ctx context.Context) *Pipe[E]`: 从切片创建并发管道。
-- `FromIterator(it iterator.Iterator[E], ctx context.Context) *Pipe[E]`: 从迭代器创建并发管道。
-- `Map`, `Filter`, `Reduce` 等函数与 `Iterator` 版本功能相同，但以并发方式执行。
+All `Pipe` operations are integrated with `context.Context` for easy timeout control and graceful shutdown.
 
-Pipe 提供的 Map、Filter、Reduce 等函数与 Iterator 版本功能类似，但它们在内部会启动 Goroutine 进行并发处理。可以为 Map 和 Filter 操作指定并行度和缓冲区大小，从而精细控制并发资源的利用。
-PS: 现在还每想好具体的并行控制参数，后续打算将并行控制参数用一个`struct`表示，现在的方案为临时方案
+**Main Operations:**
 
-**示例:**
+  * `FromSlice(data []E, ctx context.Context) *Pipe[E]`: Creates a concurrent pipe from a slice.
+  * `FromIterator(it iterator.Iterator[E], ctx context.Context) *Pipe[E]`: Creates a concurrent pipe from an iterator.
+  * `Map`, `Filter`, `Reduce`, and other functions have the same functionality as their `Iterator` counterparts, but they execute concurrently.
+
+**Example:**
+
 ```go
 ctx := context.Background()
 
-// 创建并发管道
+// Create a concurrent pipe
 p := pipe.FromSlice([]int{1, 2, 3, 4, 5}, ctx)
 
-// 并行处理（3个工作协程）
+// Concurrent processing (3 worker goroutines)
 result := pipe.Collect(
     pipe.Filter(
-        pipe.Map(p, cpuIntensiveTask, 3), // 并行度3
+        pipe.Map(p, cpuIntensiveTask, 3), // Concurrency level 3
         func(x int) bool { return x > 10 },
-        2, // 并行度2
+        2, // Concurrency level 2
     )
 )
 ```
 
-## 标准迭代器集成
-`Pipe`也实现了`Iterator`的接口，所以也算是一种迭代器，兼容 Go 1.23+ 的标准 iter 包, 可以直接通过 for-range 语法遍历
+### Integration with Standard Iterators
 
 ```go
 import "iter"
 
-// 兼容 Go 1.23+ 的 for-range 语法
-itForRange := iterator.Filter(
-	iterator.Map(iterator.FromSlice([]string{"1", "2", "3", "4"}), func(s string) int {
-		val, _ := strconv.Atoi(s)
-		return val * 3
-	}),
-	func(x int) bool { return x < 10 },
-)
-fmt.Print("for-range 遍历结果: ")
-for data := range iterator.Iter(itForRange) {
-	fmt.Printf("%d ", data) // 输出: 3 6 9
+// Convert to a standard iterator
+seq := iterator.Iter(myIterator)
+for value := range seq {
+    // Process the value
 }
-fmt.Println()
+
+// Key-value pair iteration
+seq2 := iterator.Iter2(mapIterator)
+for k, v := range seq2 {
+    // Process the key and value
+}
 ```
 
-## 错误处理
-`LaPluma` 在设计上有意简化了核心转换函数的签名，例如 `Map` 的 `handler` 是 `func(T) R` 而不是 `func(T) (R, error)`。这并非忽略错误，而是一种设计选择：**将错误视为数据流的一部分来处理**。
+## Error Handling
 
-推荐以下两种模式来处理可能失败的操作：
+`La Pluma` intentionally simplifies the signatures of core transformation functions, such as `Map`'s handler being `func(T) R` instead of `func(T) (R, error)`. This is a design choice to **treat errors as part of the data stream**.
 
-### 模式一：前置过滤 (Pre-filtering)
+The following two patterns are recommended for handling operations that might fail:
 
-如果某些数据从一开始就是非法的，或者不符合处理条件，应该在进入核心处理逻辑前，使用 `Filter` 将其剔除。
+### Pattern 1: Pre-filtering
+
+If some data is invalid from the start or doesn't meet the processing criteria, use `Filter` to remove it before it enters the core processing logic.
 
 ```go
-// 示例：只处理正数
+// Example: Process only positive numbers
 pipe := FromSlice([]int{1, -2, 3, -4}, ctx)
 positivePipe := Filter(pipe, func(n int) bool {
     return n > 0
 })
-// ... 后续操作只会看到 {1, 3}
+// ... subsequent operations will only see {1, 3}
 ```
 
-### 模式二：使用 TryMap 处理可失败的转换
+### Pattern 2: Using TryMap for Fallible Transformations
 
-当数据转换过程本身可能失败时（例如，解析字符串、调用外部 API），使用 TryMap 函数。它的 handler 签名为 func(T) (R, error)。当 handler 返回一个非 nil 的 error 时，TryMap 会自动跳过（丢弃） 这个元素，并继续处理下一个。这使得流水线可以在遭遇“数据级”错误时保持运行，而不会被中断。
+When the data transformation itself can fail (e.g., parsing a string, calling an external API), use the `TryMap` function. Its handler signature is `func(T) (R, error)`. When the handler returns a non-nil error, `TryMap` automatically skips (discards) that element and continues processing the next one. This allows the pipeline to keep running even when encountering "data-level" errors without being interrupted.
+
 ```go
 import (
     "strconv"
     "errors"
 )
 
-// 示例：将字符串转换为整数，失败则跳过
+// Example: Convert strings to integers, skip on failure
 stringPipe := FromSlice([]string{"1", "two", "3", "four"}, ctx)
 
-// 使用 TryMap，handler 返回 (int, error)
+// Use TryMap; the handler returns (int, error)
 intPipe := TryMap(stringPipe, func(s string) (int, error) {
     i, err := strconv.Atoi(s)
     if err != nil {
-        // 返回错误，这个元素将被丢弃
+        // Return an error, and this element will be discarded
         return 0, errors.New("not a number")
     }
     return i, nil
 })
 
-// 最终 Reduce 只会处理成功转换的 {1, 3}
+// The final Reduce operation will only process the successfully converted {1, 3}
 sum := Reduce(intPipe, func(acc, n int) int { return acc + n }, 0)
-// sum 的结果是 4
+// The result of sum is 4
 ```
 
-PS：若需要收集`Map`过程中的错误,可以考虑使用在`util.go`中`Result[T]`作为返回值，要如何设计此场景的错误处理机制还没想好：通过在调用时添加一个`onError`参数来处理错误；或者返回两个`Pipe`，用其中一个来处理错误信息；或者其他方案
+### Other
 
-# 运行测试
+If you need to collect errors during the `Map` process, consider using `Result[T]` from `util.go` as the return value.
+
+-----
+
+# Installation
+
+```sh
+go get github.com/muzhy/lapluma
+```
+
+# Running Tests
+
 ```sh
 go test ./...
 ```
 
-# 后续计划
-- 提供更丰富的转换操作, 如`Distinct`, `Zip`, `Peek`
-- 完善错误处理机制
-- 规范`Pipe`的并发控制参数
+# Q\&A
+
+Q: Why use a nested approach instead of a chained one?
+
+A: `lapluma` is built on generics, which reduces runtime overhead and allows for type-safe checks during compilation. However, Go's generics mechanism does not support type parameters for methods. Therefore, functions like `Map` cannot be implemented as methods and must use a nested approach. To maintain a consistent interface, all functions are implemented in a nested style.
+
+-----
+
+# Future Plans
+
+  * Provide more transformation operations, such as `Distinct`, `Zip`, and `Peek`.
+  * Improve the error handling mechanism.
+  * Standardize the concurrency control parameters for `Pipe`.

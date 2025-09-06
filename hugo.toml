@@ -1,10 +1,10 @@
 baseURL = 'https://muzhy.github.io/'
-languageCode = 'zh-cn'
-title = '木章永的个人博客'
+languageCode = 'en'
+title = "muzhy's blog"
 theme = 'dream'
-defaultcontentlanguage = 'zh'
+defaultcontentlanguage = 'en'
 enableRobotsTXT = true
-hasCJKLanguage = true
+hasCJKLanguage = false
 
 pagination.pagerSize = 20
 
@@ -12,20 +12,20 @@ pagination.pagerSize = 20
 style = 'tango'
 
 [params]
-  author = "木章永"
-  description = "木章永的个人博客"
+  author = "muzhy"
+  description = "muzhy's blog"
   avatar = 'images/avatar.jpg'
-  keywords = ["Blog", "博客"]
+  keywords = ["Blog"]
   favicon = 'images/favicon.svg'
   math = true
   enableTwemoji = true
   colorScheme = 'auto'
   lightTheme = "emerald"
   darkTheme = "forest"
-  motto = "软件的世界是想象力的世界"
+  motto = "Software is a world of imagination."
   email = "muzhy_c@foxmail.com"
-  headerTitile = "木章永的个人博客"
-  footerBottomText = "微信公众号：午夜游鱼"
+  headerTitile = "muzhy's blog"
+  # footerBottomText = "微信公众号：午夜游鱼"
   siteStartYear = 2023
   noDefaultSummaryCover = true
 

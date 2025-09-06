@@ -8,6 +8,7 @@ authors = ["木章永"]
 tags = ["DeepSeek", "VS Code", "Continue"]
 categories = ["DeepSeek"]
 cover = '/images/code_ai_agent.png'
+draft = true
 +++
 
 # 什么是 DeepSeek-Coder V2
@@ -133,6 +134,3 @@ VS Code上有很多插件可以使用，如`Continue`或`CodeGPT`，我是使用
 代码补全功能在写代码的时候会提示，如果需要让AI添加/修改代码，可以选中所需要的代码，然后按`ctrl+I`，在聊天框中输入想要AI做的工作后就可以了。
 
 更多关于`Continue`的操作可以查看[官方文档](https://docs.continue.dev/customize/overview)
-
-
-

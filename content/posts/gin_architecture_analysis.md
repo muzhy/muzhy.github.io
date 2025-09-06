@@ -1,13 +1,13 @@
 +++
-isCJKLanguage = true
 title = "Gin 框架核心架构解析"
-description = "Gin 框架核心架构解析"
-keywords = ["Go", "Gin", "HTTP"]
+description = "深入分析 Go 语言 Gin Web 框架的核心架构，从 net/http 基础到 Engine、路由、中间件和 sync.Pool 的实现原理，理解 Gin 高性能的底层设计。"
+keywords = ["Go", "Gin", "Gin框架", "Gin源码解析", "Gin底层原理", "net/http", "sync.Pool", "中间件"]
 date = 2025-08-10T17:15:02+08:00
 authors = ["木章永"]
-tags = ["Go", "Gin", "HTTP"]
-categories = ["GO"]
+tags = ["Go", "Gin"]
+categories = ["GO/Gin"]
 cover = "/images/gin.webp"
+draft = false
 +++
 
 Gin 是一个用Go (Golang) 编写的HTTP Web 框架，架构非常简洁，得益于Go的`net/http`库，不用处理`http`协议底层细节，可以更好的聚焦于应用层逻辑
