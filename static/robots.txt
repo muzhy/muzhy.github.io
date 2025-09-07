@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://my-new-blog.pages.dev/sitemap.xml
+Sitemap: https://muzhy.top/sitemap.xml
