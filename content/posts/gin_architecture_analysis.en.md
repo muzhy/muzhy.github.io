@@ -6,7 +6,7 @@ date = 2025-08-10T17:15:02+08:00
 authors = ["muzhy"]
 tags = ["Go", "Gin"]
 categories = ["Go/Gin"]
-cover = "/images/gin.webp"
+cover = "/images/gin_architecture_analysis.png"
 draft = false
 +++
 
@@ -302,26 +302,17 @@ func (c *Context) Next() {
 ```
 
 Middleware processing flow diagram:
-```mermaid
-graph TD 
-	A[Request] --> B[Middleware A] 
-	B --> C{Call c.Next}
-	C --> D[Middleware B] 
-	D --> E[Call c.Next]
-	E --> F[Business Handler] 
-	F --> G[Middleware B] 
-	G --> H[Middleware A] 
-	H --> I[Response] 
-	
-	subgraph "Middleware Execution Order" 
-		direction LR 
-		B --> D --> F 
-	end 
-	
-	subgraph "Response Return Order" 
-		direction LR 
-		F --> G --> H 
-	end
+```mermaid 
+sequenceDiagram
+    participant User
+    participant Middleware A
+    participant Middleware B
+    
+    User->>Middleware A: request
+    Middleware A->>Middleware B:  `c.Next()`
+    Middleware B->>Handler: `c.Next()`
+    Handle）->>Middleware B: response
+    Middleware B->>Middleware A: response
 ```
 
 `Abort()` terminates the entire call chain by setting `index` to `math.MaxInt8 >> 1`:
