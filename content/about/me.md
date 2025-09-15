@@ -1,7 +1,7 @@
 ---
-title: 关于我
+title: About Me
 date: 2025-03-02T09:32:36+08:00
 draft: true
 ---
 
-一个普通的码农
+A programer

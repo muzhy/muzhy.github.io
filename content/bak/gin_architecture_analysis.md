@@ -7,7 +7,7 @@ authors = ["木章永"]
 tags = ["Go", "Gin"]
 categories = ["GO/Gin"]
 cover = "/images/gin.webp"
-draft = false
+draft = true
 +++
 
 Gin 是一个用Go (Golang) 编写的HTTP Web 框架，架构非常简洁，得益于Go的`net/http`库，不用处理`http`协议底层细节，可以更好的聚焦于应用层逻辑

@@ -5,7 +5,7 @@ keywords = ["Go", "Golang", "Gin", "Gin framework", "Gin internals", "Gin archit
 date = 2025-08-10T17:15:02+08:00
 authors = ["muzhy"]
 tags = ["Go", "Gin"]
-categories = ["Go/Gin"]
+categories = ["Go"]
 cover = "/images/gin_architecture_analysis.png"
 draft = false
 +++
@@ -16,6 +16,7 @@ Gin is an HTTP web framework written in Go (Golang). It features a concise archi
 Since Gin is built on `net/http`, let's first get a brief understanding of `net/http`.
 
 The `net/http` package provides both HTTP client and server functionalities. Here, we'll focus on the server-side features.
+
 ## Core Server Design
 Thanks to Go's concurrency model, we don't need to worry about I/O multiplexing mechanisms like the traditional Reactor or Proactor patterns. Instead, a separate `goroutine` is created for each incoming request. (If you're interested in this part, you can look into Go's scheduler and goroutines).
 
@@ -44,17 +45,6 @@ func main() {
 }
 ```
 > ListenAndServe starts an HTTP server with a given address and handler. The handler is usually nil, which means to use DefaultServeMux. Handle and HandleFunc add handlers to DefaultServeMux.
-
-Here is a diagram of the processing flow:
-```mermaid
-graph TD
-	A[Client Request] --> B[net/http.ListenAndServe]
-	B --> C[Create Goroutine]
-	C --> D[Parse HTTP Request] 
-	D --> E[Call Handler.ServeHTTP] 
-	E --> F[Business Logic Processing] 
-	F --> G[Return HTTP Response]
-```
 
 
 The `http.ListenAndServe` function:
@@ -99,10 +89,14 @@ func (mux *ServeMux) Handler(r *Request) (h Handler, pattern string) {
 ```
 
 ## Summary
-To recap, `net/http` starts an HTTP server with `ListenAndServe`, listening on a specified port. When a request arrives, it launches a goroutine to handle it (`net/http/server.go`). After parsing the HTTP request, it calls the `Handler.ServeHTTP` method for processing. This method can be customized by implementing the `Handler` interface and set when calling `ListenAndServe`.
+To recap, `net/http` starts an HTTP server with `ListenAndServe`, listening on a specified port. When a request arrives, it launches a goroutine to handle it (`net/http/server.go`). 
+
+After parsing the HTTP request, it calls the `Handler.ServeHTTP` method for processing. This method can be customized by implementing the `Handler` interface and set when calling `ListenAndServe`.
 
 # `Engine`: The Core of Gin
-As mentioned, Gin works by implementing the `http.Handler` interface. In Gin, the type that implements this interface is the `Engine`. Therefore, starting with the `Engine` is a good way to understand Gin's structure.
+As mentioned, Gin works by implementing the `http.Handler` interface. 
+
+In Gin, the type that implements this interface is the `Engine`. Therefore, starting with the `Engine` is a good way to understand Gin's structure.
 ## ServeHTTP
 When `net/http` receives a request, it creates a goroutine to handle it. After reading and parsing the data, it calls `ServeHTTP`.
 ```go
@@ -118,15 +112,7 @@ func (sh serverHandler) ServeHTTP(rw ResponseWriter, req *Request) {
 	handler.ServeHTTP(rw, req)
 }
 ```
-The `ServeHTTP` processing flow:
-```mermaid
-graph TD 
-	A[Request Arrives] --> B[Get Context from sync.Pool] 
-	B --> C[Reset Context State] 
-	C --> D[Handle HTTP Request] 
-	D --> E[Return Context to sync.Pool] 
-	E --> F[Response Returned]
-```
+
 The implementation of `Engine`'s `ServeHTTP` is as follows:
 ```go
 // ServeHTTP conforms to the http.Handler interface.
@@ -145,12 +131,16 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 For each request, Gin allocates a `gin.Context` object to manage the request's context. To avoid frequent creation and destruction of `gin.Context` objects, `engine.pool` is used to cache them. When a request arrives, a `gin.Context` object is retrieved from the pool and its state is reset. This `gin.Context` is then passed down the processing chain. After the request is handled, the `gin.Context` is returned to the object pool.
 
+
 After obtaining a `gin.Context`, the request is handled by `handleHTTPRequest`. This function first determines the route based on the URL and retrieves all handlers (i.e., middleware) bound to that route path. These middleware form a processing chain, and the handlers in the chain are executed sequentially.
 
 ## A Look at `sync.Pool`
-`engine.pool` is of type `sync.Pool`, a thread-safe object pool that provides `Get()` and `Put()` methods, allowing it to be used concurrently by multiple goroutines. Its internal design prioritizes local goroutine caches to reduce lock contention (each goroutine has a private local cache). When `Get()` is called, it first tries to retrieve from the local cache, and only if the local cache is empty does it access the shared pool. `Put()` also prioritizes returning objects to the local cache.
+`engine.pool` is of type `sync.Pool`, a thread-safe object pool that provides `Get()` and `Put()` methods, allowing it to be used concurrently by multiple goroutines. 
 
-**Why reset `gin.Context`?**
+Its internal design prioritizes local goroutine caches to reduce lock contention (each goroutine has a private local cache). When `Get()` is called, it first tries to retrieve from the local cache, and only if the local cache is empty does it access the shared pool. `Put()` also prioritizes returning objects to the local cache.
+
+### Why reset `gin.Context`?
+
 `sync.Pool` is not suitable for storing objects that are stateful and cannot be reset. `gin.Context` is a typical example; it stores request-related state, such as the `Request`, `ResponseWriter`, and `Keys` passed between middleware. If not reset, the next request might use stale data from the previous one, leading to logical errors.
 
 Gin solves this by calling `c.reset()` in the `ServeHTTP` method. The `reset` method restores the `Context`'s state (like `Request`, `ResponseWriter`, `Keys`, `index`, etc.) to its initial state, ensuring each request gets a clean context.
@@ -328,8 +318,6 @@ func (c *Context) Abort() {
 	c.index = abortIndex
 }
 ```
-
-
 # Conclusion
 The Gin framework achieves a concise and efficient web service through the following core mechanisms:
 - **Built on `net/http`**: It leverages the `Handler` interface and concurrency model to decouple network details from business logic.
